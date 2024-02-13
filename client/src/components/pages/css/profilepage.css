@@ -1,0 +1,124 @@
+.profile-container {
+  margin: 20px 50px;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: row;
+}
+
+.profile-image {
+  flex: 1;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.profile-image img {
+  width: 60%;
+  border-radius: 50%;
+  margin-top: 10px;
+  margin-left: 20%;
+}
+
+.user-head {
+  margin-left: 5%;
+}
+
+.profile-details {
+  flex: 2;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.profile-details h2 {
+  margin-top: 0;
+}
+
+.profile-details p {
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .profile-container {
+    flex-direction: column;
+  }
+
+  .profile-image,
+  .profile-details {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.tab-container {
+  display: flex;
+  justify-content: space-around;
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 12px;
+  margin: 50px;
+}
+
+.tab {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.active-tab {
+  background-color: #ddd;
+}
+
+.tab-content {
+  display: none;
+  margin: 50px;
+}
+
+.active-content {
+  display: block;
+}
+
+.reset-password-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  border: 1px solid #ccc; /* Default border */
+  transition: border-color 0.3s ease; /* Add transition for smooth effect */
+}
+
+/* Set a specific border color for password and tel input fields */
+input[type="password"],
+input[type="tel"] {
+  border-color: #4caf50;
+}
+
+input:focus {
+  border-color: #4caf50; /* Border color when in focus (clicked) */
+}
+
+.profile_button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.profile_button:hover {
+  background-color: #45a049;
+}

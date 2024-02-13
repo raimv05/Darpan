@@ -1,0 +1,129 @@
+/* testlister.css */
+
+/* Sidebar Styles */
+.test-lister-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #f1f1f1;
+  padding: 10px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: left;
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Section Styles */
+.explorersQuest,
+.tailoredChallenges,
+.creatorsLab {
+  display: none;
+}
+
+.explorersQuest.active,
+.tailoredChallenges.active,
+.creatorsLab.active {
+  display: block;
+}
+
+/* Form Styles */
+.form {
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.input_field {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Card Styles */
+/* Card Styles */
+.test-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.card-details {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping to next line if necessary */
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.card-details div {
+  flex: 1;
+}
+
+.card-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.div{
+  display: none;
+}
+.active{
+  display: block;
+}
