@@ -34,7 +34,6 @@ const Tests = () => {
 
         <div className="button-container">
           <button>Previous</button>
-          <button>"Add Question"</button>
           <button>Next</button>
         </div>
       </div>

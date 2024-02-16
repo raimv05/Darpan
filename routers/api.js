@@ -14,7 +14,7 @@ const {
 const auth = require("../middleware/auth");
 // === === === Demo === === == //
 
-router.post("/call", registerStudent);
+router.post("/call", auth, registerStudent);
 
 // === === === register === === === //
 

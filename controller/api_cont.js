@@ -11,28 +11,17 @@ const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const { getauthurl, getToken } = require("../middleware/authurl");
 const uniqid = require("uniqid");
-const { addStudent, getStudentByEmail } = require("../collection/Student.js");
 
 // === === === controller === === === //
 
 exports.registerStudent = async (req, res) => {
   try {
-    const {
-      name,
-      surname,
-      phoneNumber,
-      email,
-      dob,
-      Class,
-      gender,
-      schoolName,
-      schoolCode,
-    } = req.body;
-    const add = await addStudent({
-      name,
-      surname,
-      phoneNumber,
-      email,
+    const { phone, dob, Class, gender, schoolName, schoolCode } = req.body;
+    const user = req.user;
+    console.log(Class);
+    const add = await updateuser({
+      ...user,
+      phone,
       dob,
       Class,
       gender,
@@ -40,14 +29,12 @@ exports.registerStudent = async (req, res) => {
       schoolCode,
     });
     if (add.result) {
-      res
-        .status(201)
-        .json({ result: true, message: "registration was successful" });
+      res.status(200).json({ result: true, message: "Details Saved" });
     } else {
       throw new Error(
         JSON.stringify({
           status: 400,
-          message: "Some error occured",
+          message: "Some Error occured",
         })
       );
     }
@@ -204,8 +191,32 @@ exports.login = async (req, res) => {
 
 exports.profile = async (req, res) => {
   try {
-    const { email, name, phone, id, verification, registrationDate } = req.user;
-    res.json({ email, name, phone, id, verification, registrationDate });
+    const {
+      email,
+      name,
+      phone,
+      id,
+      verification,
+      registrationDate,
+      dob,
+      Class,
+      gender,
+      schoolName,
+      schoolCode,
+    } = req.user;
+    res.json({
+      email,
+      name,
+      phone,
+      id,
+      verification,
+      registrationDate,
+      dob,
+      Class,
+      gender,
+      schoolName,
+      schoolCode,
+    });
   } catch (error) {
     const err = JSON.parse(error.message);
     res.status(400 || err.status).json({ result: false, message: err.message });

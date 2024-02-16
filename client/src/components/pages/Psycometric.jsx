@@ -13,7 +13,7 @@ const Createtest = () => {
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
-    phoneNumber: "",
+    phone: "",
     dob: "",
     Class: "",
     gender: "",
@@ -43,30 +43,15 @@ const Createtest = () => {
     e.preventDefault();
     console.log(formData);
     // Validate that all fields are filled
-    const {
-      name,
-      surname,
-      phoneNumber,
-      email,
-      dob,
-      Class,
-      gender,
-      schoolName,
-      schoolCode,
-    } = formData;
-    if (!email || !validator.isEmail(email)) {
-      return alert("Please enter a valid email");
-    } else if (!validator.isMobilePhone(phoneNumber, "en-IN")) {
+    const { phone, dob, Class, gender, schoolName, schoolCode } = formData;
+    if (!validator.isMobilePhone(phone, "en-IN")) {
       return alert("please enter  a valid phone number");
     }
     const response = await fetch("/api/call", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name,
-        surname,
-        phoneNumber,
-        email,
+        phone,
         dob,
         Class,
         gender,
@@ -93,38 +78,11 @@ const Createtest = () => {
             {showForm && (
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label>Name:</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Surname:</label>
-                  <input
-                    type="text"
-                    name="surname"
-                    value={formData.surname}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Email:</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
                   <label>Phone Number:</label>
                   <input
                     type="tel"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
+                    name="phone"
+                    value={formData.phone}
                     onChange={handleChange}
                   />
                 </div>
@@ -141,8 +99,8 @@ const Createtest = () => {
                   <label>Class:</label>
                   <input
                     type="text"
-                    name="class"
-                    value={formData.class}
+                    name="Class"
+                    value={formData.Class}
                     onChange={handleChange}
                   />
                 </div>
