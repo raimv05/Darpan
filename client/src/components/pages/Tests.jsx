@@ -86,10 +86,20 @@ function Tests() {
             </button>
           )}
         </div>
+<<<<<<< HEAD
       ) : (
         <div className="loader">Loading...</div>
       )}
     </>
+=======
+
+        <div className="button-container">
+          <button>Previous</button>
+          <button>Next</button>
+        </div>
+      </div>
+    </div>
+>>>>>>> 5bbd460d215c2e41847f5d42956cb3d0d639f7b8
   );
 }
 
