@@ -11,28 +11,17 @@ const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const { getauthurl, getToken } = require("../middleware/authurl");
 const uniqid = require("uniqid");
-const { addStudent, getStudentByEmail } = require("../collection/Student.js");
 
 // === === === controller === === === //
 
 exports.registerStudent = async (req, res) => {
   try {
-    const {
-      name,
-      surname,
-      phoneNumber,
-      email,
-      dob,
-      Class,
-      gender,
-      schoolName,
-      schoolCode,
-    } = req.body;
-    const add = await addStudent({
-      name,
-      surname,
-      phoneNumber,
-      email,
+    const { phone, dob, Class, gender, schoolName, schoolCode } = req.body;
+    const user = req.user;
+    console.log(Class);
+    const add = await updateuser({
+      ...user,
+      phone,
       dob,
       Class,
       gender,
@@ -40,14 +29,12 @@ exports.registerStudent = async (req, res) => {
       schoolCode,
     });
     if (add.result) {
-      res
-        .status(201)
-        .json({ result: true, message: "registration was successful" });
+      res.status(200).json({ result: true, message: "Details Saved" });
     } else {
       throw new Error(
         JSON.stringify({
           status: 400,
-          message: "Some error occured",
+          message: "Some Error occured",
         })
       );
     }
@@ -204,8 +191,32 @@ exports.login = async (req, res) => {
 
 exports.profile = async (req, res) => {
   try {
-    const { email, name, phone, id, verification, registrationDate } = req.user;
-    res.json({ email, name, phone, id, verification, registrationDate });
+    const {
+      email,
+      name,
+      phone,
+      id,
+      verification,
+      registrationDate,
+      dob,
+      Class,
+      gender,
+      schoolName,
+      schoolCode,
+    } = req.user;
+    res.json({
+      email,
+      name,
+      phone,
+      id,
+      verification,
+      registrationDate,
+      dob,
+      Class,
+      gender,
+      schoolName,
+      schoolCode,
+    });
   } catch (error) {
     const err = JSON.parse(error.message);
     res.status(400 || err.status).json({ result: false, message: err.message });
@@ -359,117 +370,13 @@ exports.logout = async (req, res) => {
 
 // === === === upload a new test === === === //
 
-function validateTest(test) {
-  // General Test Information Validation
-  if (!test.title.trim()) {
-    return "Test title cannot be empty.";
-  }
-
-  const testDatetime = new Date(test.datetime);
-  if (!(testDatetime instanceof Date) || isNaN(testDatetime)) {
-    return "Invalid datetime format or not a future date.";
-  }
-
-  const duration = parseInt(test.duration, 10);
-  if (isNaN(duration) || duration <= 0) {
-    return "Duration must be a positive number.";
-  }
-
-  // Section-level Validation
-  test.sections = test.sections.filter(
-    (itm) => itm.marks && itm.question_count
-  );
-  if (parseInt(test.section, 10) !== test.sections.length) {
-    return "Number of sections does not match the expected number specified.";
-  }
-
-  for (const section of test.sections) {
-    if (
-      isNaN(parseInt(section.question_count, 10)) ||
-      parseInt(section.question_count, 10) <= 0
-    ) {
-      return "Invalid question count for a section.";
-    }
-
-    if (
-      isNaN(parseInt(section.marks, 10)) ||
-      parseInt(section.marks, 10) <= 0
-    ) {
-      return "Invalid marks for a section.";
-    }
-
-    const sectionNegative =
-      section.negative.trim() !== "" ? parseFloat(section.negative) : null;
-
-    if (
-      sectionNegative !== null &&
-      (isNaN(sectionNegative) ||
-        sectionNegative < 0 ||
-        sectionNegative > parseInt(section.marks, 10))
-    ) {
-      return "Invalid negative marking for a section.";
-    }
-  }
-
-  // Question-level Validation
-  for (const section of test.sections) {
-    for (const question of section.questions) {
-      if (!question.question.trim()) {
-        return "Question text cannot be empty.";
-      }
-
-      const optionCount = parseInt(question.option_count, 10);
-      if (
-        isNaN(optionCount) ||
-        optionCount <= 0 ||
-        optionCount !== question.options.length
-      ) {
-        return "Invalid option count for a question.";
-      }
-
-      for (const option of question.options) {
-        if (!option.text.trim()) {
-          return "Option text cannot be empty.";
-        }
-
-        // if (option.iscorrect !== undefined && option.iscorrect !== true) {
-        //   return "At least one option must be marked as correct.";
-        // }
-      }
-    }
-  }
-
-  // Global Test-level Validation
-  const totalQuestions = test.sections.reduce(
-    (total, section) => total + section.questions.length,
-    0
-  );
-  if (
-    totalQuestions !==
-    test.sections.reduce(
-      (total, section) => total + parseInt(section.question_count, 10),
-      0
-    )
-  ) {
-    return "Total number of questions does not match the sum of question counts in sections.";
-  }
-  return null;
-}
-
 exports.upload_test = async (req, res) => {
   try {
     const user = req.user;
     const data = req.body;
-    let validations = validateTest(data);
-    if (validations) {
-      console.log(validations);
-      return res.status(400).json({ result: false, message: validations });
-    }
-    let result = await addTest({
-      ...data,
-      id: uniqid("test-"),
-      creator_id: user.id,
-    });
+    let test = { ...data, id: uniqid("test-"), creator_id: user.email };
+    console.log(test);
+    let result = await addTest(test);
     if (result.result) {
       res
         .status(201)
@@ -493,25 +400,12 @@ exports.upload_test = async (req, res) => {
 
 exports.get_test = async (req, res) => {
   try {
-    const { userId, testId } = req.body;
-
-    const tests = await getAllTests(userId, testId);
+    const tests = await getAllTests();
 
     if (tests.length === 0) {
       return res.status(404).json({ error: "No tests found" });
     }
-
-    const filteredTests = tests.map(
-      ({ id, creator_id, title, datetime, duration }) => ({
-        id,
-        creator_id,
-        title,
-        datetime,
-        duration,
-      })
-    );
-
-    return res.status(200).json({ tests: filteredTests });
+    return res.status(200).json({ tests });
   } catch (error) {
     console.error("Error fetching test data:", error);
     return res.status(500).json({ error: "Internal Server Error" });

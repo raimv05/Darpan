@@ -15,6 +15,7 @@ import Psycometric from "./components/pages/Psycometric";
 import Nav from "./components/templates/Nav";
 import Testlister from "./components/pages/Testlister";
 import Tests from "./components/pages/Tests.jsx";
+import Uploadtest from "./components/pages/Uploadtest";
 // === === === Ends here === === === //
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -30,6 +31,7 @@ root.render(
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/Signup" element={<Signup />} />
           <Route exact path="/newtest" element={<Createtest />} />
+          <Route exact path="/uploadtest" element={<Uploadtest />} />
           <Route exact path="/profile" element={<Profilepage />} />
           <Route exact path="/psycometric" element={<Psycometric />} />
           <Route exact path="/available-tests" element={<Testlister />} />

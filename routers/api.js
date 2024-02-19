@@ -14,7 +14,7 @@ const {
 const auth = require("../middleware/auth");
 // === === === Demo === === == //
 
-router.post("/call", registerStudent);
+router.post("/call", auth, registerStudent);
 
 // === === === register === === === //
 
@@ -46,7 +46,7 @@ router.post("/new/test", auth, upload_test);
 
 // === === === get test === === === //
 
-router.post("/avilable-test", auth, get_test);
+router.get("/avilable-test", auth, get_test);
 
 // === === === get profile === === === //
 
