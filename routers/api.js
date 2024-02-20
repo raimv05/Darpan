@@ -10,6 +10,8 @@ const {
   upload_test,
   get_test,
   registerStudent,
+  submission,
+  get_submission,
 } = require("../controller/api_cont");
 const auth = require("../middleware/auth");
 // === === === Demo === === == //
@@ -40,10 +42,6 @@ router.get("/auth/google", google_handel_token);
 
 router.get("/logout", auth, logout);
 
-// === === === create test === === === //
-
-router.post("/new/test", auth, upload_test);
-
 // === === === get test === === === //
 
 router.get("/avilable-test", auth, get_test);
@@ -51,5 +49,13 @@ router.get("/avilable-test", auth, get_test);
 // === === === get profile === === === //
 
 router.get("/profile", auth, profile);
+
+// === === === submit === === === //
+
+router.post("/test/submmit", auth, submission);
+
+// === === === search submission === === === //
+
+router.get("/search", auth, get_submission);
 
 module.exports = router;

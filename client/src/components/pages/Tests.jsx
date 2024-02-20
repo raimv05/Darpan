@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "../pages/css/tests.css"; // Import the CSS file
+import { useNavigate } from "react-router-dom";
 
 function Tests() {
   const [testData, setTestData] = useState();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isOptionSelected, setIsOptionSelected] = useState(false);
-
+  const Navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,36 +39,54 @@ function Tests() {
     setCurrentQuestionIndex(currentQuestionIndex + 1);
     setIsOptionSelected(false); // Reset option selected state for the next question
   };
-
-  const handleSubmit = () => {
-    console.log("Selected options:", selectedOptions);
+  const handleSubmit = async () => {
+    try {
+      let s = 0;
+      selectedOptions.forEach((i) => {
+        s += i;
+      });
+      const response = await fetch("/api/test/submmit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sum: s,
+          selectedOptions,
+        }),
+      });
+      let res = await response.json();
+      if (response.status === 201) {
+        alert("Subbmited");
+        // Navigate("/");
+      } else {
+        return alert(res.message);
+      }
+    } catch (error) {}
   };
-
-  console.log(selectedOptions);
-
   return (
     <>
       {testData ? (
         <div className="mcq-container">
           <h2 className="question">
-            {testData[0].question[currentQuestionIndex].que}
+            {testData.question[currentQuestionIndex].que}
           </h2>
           <ul className="options">
-            {testData[0].question[currentQuestionIndex].options.map(
+            {testData.question[currentQuestionIndex].options.map(
               (option, index) => (
                 <li key={index} className="option">
                   <input
                     type="radio"
-                    name={`question-${currentQuestionIndex}`}
-                    checked={selectedOptions[currentQuestionIndex] === index}
-                    onChange={() => handleOptionChange(index)}
+                    name={`question-${currentQuestionIndex + 1}`}
+                    checked={
+                      selectedOptions[currentQuestionIndex] === index + 1
+                    }
+                    onChange={() => handleOptionChange(index + 1)}
                   />
                   <label>{option.ans}</label>
                 </li>
               )
             )}
           </ul>
-          {currentQuestionIndex < testData[0].question.length - 1 ? (
+          {currentQuestionIndex < testData.question.length - 1 ? (
             <button
               className="submit-button"
               onClick={handleNextQuestion}

@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const bcrypt = require("bcrypt");
 const axios = require("axios");
 const {
@@ -6,11 +8,16 @@ const {
   getUserByPhone,
   updateuser,
 } = require("../collection/Users");
-const { addTest, getAllTests } = require("../collection/Test");
+const {
+  addSubmission,
+  getAllSubmission,
+  searchSubmission,
+} = require("../collection/Submission");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const { getauthurl, getToken } = require("../middleware/authurl");
 const uniqid = require("uniqid");
+const PDFDocument = require("pdfkit");
 
 // === === === controller === === === //
 
@@ -368,46 +375,194 @@ exports.logout = async (req, res) => {
   }
 };
 
-// === === === upload a new test === === === //
-
-exports.upload_test = async (req, res) => {
-  try {
-    const user = req.user;
-    const data = req.body;
-    let test = { ...data, id: uniqid("test-"), creator_id: user.email };
-    console.log(test);
-    let result = await addTest(test);
-    if (result.result) {
-      res
-        .status(201)
-        .json({ result: true, message: "test created successfully" });
-    } else {
-      throw new Error(
-        JSON.stringify({
-          status: 400,
-          message: "Some error occured",
-        })
-      );
-    }
-  } catch (error) {
-    const err = JSON.parse(error.message);
-    res
-      .clearCookie("idnty")
-      .status(400 || err.status)
-      .json({ result: false, message: err.message });
-  }
-};
-
 exports.get_test = async (req, res) => {
   try {
-    const tests = await getAllTests();
-
-    if (tests.length === 0) {
-      return res.status(404).json({ error: "No tests found" });
-    }
-    return res.status(200).json({ tests });
+    fs.readFile(
+      path.join(__dirname, "../questions/question.json"),
+      (err, data) => {
+        if (err) {
+          console.error("Error reading file:", err);
+          return res.status(400).json({
+            result: false,
+            message: "Some error occurred",
+          });
+        } else {
+          const tests = JSON.parse(data);
+          return res.status(200).json({ tests });
+        }
+      }
+    );
   } catch (error) {
     console.error("Error fetching test data:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
+};
+function generatePDF(submissionData) {
+  // Create a new PDF document
+  const doc = new PDFDocument();
+
+  // Generate a unique filename using timestamp
+  const timestamp = Date.now();
+  const fileName = `submission_${timestamp}.pdf`;
+
+  // Define the directory path where the PDF will be saved
+  const directoryPath = path.join(__dirname, "../questions/results/");
+
+  // Ensure that the directory exists, create it if not
+  if (!fs.existsSync(directoryPath)) {
+    fs.mkdirSync(directoryPath, { recursive: true });
+  }
+
+  // Define the file path where the PDF will be saved
+  const filePath = path.join(directoryPath, fileName);
+
+  // Pipe the PDF content to a writable stream to save it as a file
+  const writeStream = fs.createWriteStream(filePath);
+  doc.pipe(writeStream);
+
+  // Write submission data to the PDF
+  doc.text("Submission Data", { underline: true }).moveDown();
+  doc.text(JSON.stringify(submissionData, null, 2));
+
+  // Finalize the PDF
+  doc.end();
+}
+function appendObjectToArray(data, fileLocation) {
+  // Ensure that fileLocation is a string
+  if (typeof fileLocation !== "string") {
+    console.error("File location must be a string.");
+    return;
+  }
+
+  fs.readFile(fileLocation, "utf8", (err, fileData) => {
+    let jsonData = [];
+
+    if (err) {
+      // If file does not exist, create the file
+      if (err.code === "ENOENT") {
+        console.log("File does not exist. Creating a new file.");
+        jsonData.push(data); // Add the new data to the array
+      } else {
+        console.error("Error reading file:", err);
+        return;
+      }
+    } else {
+      if (fileData.trim() !== "") {
+        // If fileData is not empty, parse it as JSON
+        try {
+          jsonData = JSON.parse(fileData);
+          if (!Array.isArray(jsonData)) {
+            console.log(
+              "Existing data in file is not an array. Resetting to empty array."
+            );
+            jsonData = []; // Reset jsonData to an empty array
+          }
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+          return;
+        }
+      }
+      // Push the new data to the array
+      jsonData.push(data);
+    }
+
+    // Convert the modified JavaScript object back to JSON
+    const updatedJsonData = JSON.stringify(jsonData, null, 2);
+
+    // Write the updated JSON data back to the file
+    fs.writeFile(fileLocation, updatedJsonData, "utf8", (err) => {
+      if (err) {
+        console.error("Error writing file:", err);
+        return;
+      }
+      console.log("Object appended to array successfully!");
+    });
+    generatePDF(data);
+  });
+}
+function checkEmailExists(emailToCheck, fileLocation) {
+  // Ensure that fileLocation is a string
+  if (typeof fileLocation !== "string") {
+    console.error("File location must be a string.");
+    return false;
+  }
+
+  try {
+    // Check if the file exists
+    if (!fs.existsSync(fileLocation)) {
+      console.log("File does not exist.");
+      return false;
+    }
+
+    // Read the JSON file synchronously
+    const fileData = fs.readFileSync(fileLocation, "utf8");
+
+    // Parse the file content as JSON
+    const jsonData = JSON.parse(fileData);
+
+    // Check if any object in jsonData has the specified email
+    return jsonData.some((obj) => obj.email === emailToCheck);
+  } catch (error) {
+    console.error("Error reading or parsing JSON file:", error);
+    return false;
+  }
+}
+exports.submission = async (req, res) => {
+  try {
+    const data = req.body;
+    const { id, name, email, schoolName, schoolCode } = req.user;
+    if (
+      checkEmailExists(
+        email,
+        path.join(__dirname, "../questions/submission.json")
+      )
+    ) {
+      return res.status(400).json({
+        message: "already submitted",
+      });
+    }
+    let sub = {
+      ...data,
+      name,
+      email,
+      schoolCode,
+      schoolName,
+      student_id: id,
+    };
+    const result = await addSubmission(sub);
+
+    appendObjectToArray(
+      sub,
+      path.join(__dirname, "../questions/submission.json")
+    );
+
+    if (result.result) {
+      res.status(201).json({ result: true, message: "Submitted" });
+    } else {
+      throw new Error(
+        JSON.stringify({
+          status: 400,
+          message: "Some error occurred",
+        })
+      );
+    }
+  } catch (error) {
+    console.error("Error fetching test data:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+exports.get_submission = async (req, res) => {
+  try {
+    if (!req.query.email) {
+      return res.status(400).json({
+        message: "Failed",
+      });
+    } else {
+      console.log(req.query.email);
+    }
+    let data = await searchSubmission({
+      email: req.query.email,
+    });
+    res.status(200).json(data);
+  } catch (error) {}
 };

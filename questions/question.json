@@ -1,0 +1,52 @@
+
+  
+
+  {
+    "question": [
+      {
+        "que": "1 Select one of the following",
+        "options": [
+          {
+            "ans": "I am naturally drawn to the external world, enjoying interactions with others."
+          },
+          {
+            "ans": "I am more inclined towards introspection, valuing the world of my own thoughts and feelings."
+          }
+        ]
+      },
+      {
+        "que": "2 Select one of the following",
+        "options": [
+          {
+            "ans": "I find energy in socializing broadly and engaging with various groups of people."
+          },
+          {
+            "ans": "I find energy in having in-depth, one-on-one conversations, focusing on individual connections."
+          }
+        ]
+      },
+      
+      {
+        "que": "65) I make people feel at ease.",
+        "options": [
+          { "ans": "Strongly Agree" },
+  
+          { "ans": "Agree" },
+          { "ans": "Neutral" },
+          { "ans": "Disagree" },
+          { "ans": "Strongly Disagree" }
+        ]
+      },
+      {
+        "que": "66) I am always prepared.",
+        "options": [
+          { "ans": "Strongly Agree" },
+  
+          { "ans": "Agree" },
+          { "ans": "Neutral" },
+          { "ans": "Disagree" },
+          { "ans": "Strongly Disagree" }
+        ]
+      }
+    ]
+  }

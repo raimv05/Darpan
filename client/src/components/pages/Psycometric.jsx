@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Tests from "./Tests";
 
 import "./css/createtest.css";
 import validator from "validator";
@@ -30,7 +31,7 @@ const Createtest = () => {
   const toggleForm = () => {
     setShowForm(!showForm);
   };
-
+  const [view, setview] = useState(true);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -63,95 +64,99 @@ const Createtest = () => {
     if (!res.result) {
       return alert("student registration failed");
     } else {
-      Navigate("/attempt-test");
+      setview(false);
     }
   };
 
   return (
     <>
-      <div className="Createtest">
-        <div className="Ctest-main">
-          <div className="left-bx">
-            <div className="section-tgl" onClick={toggleForm}>
-              Fill Up Details
-            </div>
-            {showForm && (
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label>Phone Number:</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Date of Birth:</label>
-                  <input
-                    type="date"
-                    name="dob"
-                    value={formData.dob}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Class:</label>
-                  <input
-                    type="text"
-                    name="Class"
-                    value={formData.Class}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Gender:</label>
-                  <select
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-              </form>
-            )}
-          </div>
-          <div className="right-bx">
-            {showForm && (
-              <div className="additional-details">
-                <div className="form-group">
-                  <label>School Name:</label>
-                  <input
-                    type="text"
-                    name="schoolName"
-                    value={formData.schoolName}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>School Code:</label>
-                  <input
-                    type="text"
-                    name="schoolCode"
-                    value={formData.schoolCode}
-                    onChange={handleChange}
-                  />
-                </div>
-                
-                <div className="button-submit-container">
-                  <button type="submit" onClick={handleSubmit}>
-                    Submit
-                  </button>
-                </div>
+      {view ? (
+        <div className="Createtest">
+          <div className="Ctest-main">
+            <div className="left-bx">
+              <div className="section-tgl" onClick={toggleForm}>
+                Fill Up Details
               </div>
-            )}
+              {showForm && (
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label>Phone Number:</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Date of Birth:</label>
+                    <input
+                      type="date"
+                      name="dob"
+                      value={formData.dob}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Class:</label>
+                    <input
+                      type="text"
+                      name="Class"
+                      value={formData.Class}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Gender:</label>
+                    <select
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </form>
+              )}
+            </div>
+            <div className="right-bx">
+              {showForm && (
+                <div className="additional-details">
+                  <div className="form-group">
+                    <label>School Name:</label>
+                    <input
+                      type="text"
+                      name="schoolName"
+                      value={formData.schoolName}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>School Code:</label>
+                    <input
+                      type="text"
+                      name="schoolCode"
+                      value={formData.schoolCode}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="button-submit-container">
+                    <button type="submit" onClick={handleSubmit}>
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Tests />
+      )}
     </>
   );
 };

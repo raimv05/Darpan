@@ -14,7 +14,6 @@ import Profilepage from "./components/pages/Profilepage";
 import Psycometric from "./components/pages/Psycometric";
 import Nav from "./components/templates/Nav";
 import Testlister from "./components/pages/Testlister";
-import Tests from "./components/pages/Tests.jsx";
 import Uploadtest from "./components/pages/Uploadtest";
 // === === === Ends here === === === //
 
@@ -35,7 +34,6 @@ root.render(
           <Route exact path="/profile" element={<Profilepage />} />
           <Route exact path="/psycometric" element={<Psycometric />} />
           <Route exact path="/available-tests" element={<Testlister />} />
-          <Route exact path="/attempt-test" element={<Tests />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </>
