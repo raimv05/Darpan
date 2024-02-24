@@ -198,31 +198,8 @@ exports.login = async (req, res) => {
 
 exports.profile = async (req, res) => {
   try {
-    const {
-      email,
-      name,
-      phone,
-      id,
-      verification,
-      registrationDate,
-      dob,
-      Class,
-      gender,
-      schoolName,
-      schoolCode,
-    } = req.user;
     res.json({
-      email,
-      name,
-      phone,
-      id,
-      verification,
-      registrationDate,
-      dob,
-      Class,
-      gender,
-      schoolName,
-      schoolCode,
+      ...req.user,
     });
   } catch (error) {
     const err = JSON.parse(error.message);
@@ -521,21 +498,22 @@ exports.submission = async (req, res) => {
         message: "already submitted",
       });
     }
+
     let sub = {
-      ...data,
+      id,
       name,
       email,
-      schoolCode,
       schoolName,
-      student_id: id,
+      schoolCode,
+      submission: data,
     };
-    const result = await addSubmission(sub);
+    const result = await updateuser({ ...req.user, submission: data });
 
     appendObjectToArray(
       sub,
       path.join(__dirname, "../questions/submission.json")
     );
-
+    console.log("hi");
     if (result.result) {
       res.status(201).json({ result: true, message: "Submitted" });
     } else {
