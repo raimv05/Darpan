@@ -77,6 +77,7 @@ const Createtest = () => {
               <div className="section-tgl" onClick={toggleForm}>
                 Fill Up Details
               </div>
+              <br />
               {showForm && (
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">

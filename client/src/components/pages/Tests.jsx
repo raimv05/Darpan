@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./css/tests.css";
 
 function Tests() {
   const [testData, setTestData] = useState();
@@ -75,6 +76,7 @@ function Tests() {
                 <li key={index} className="option">
                   <input
                     type="radio"
+                    className="radio-input"
                     name={`question-${currentQuestionIndex + 1}`}
                     checked={
                       selectedOptions[currentQuestionIndex] === index + 1

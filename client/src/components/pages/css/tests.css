@@ -1,63 +1,144 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
-  }
-  
-  .mcq-container {
-    max-width: 600px;
-    margin: 50px auto;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    box-sizing: border-box;
-  }
-  
-  .question {
-    font-size: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .options {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .option {
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    margin-right: -500px;
-  }
-  
-  .option input[type="radio"] {
-    margin-right: 0px;
-    
-  }
-  
-  .submit-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .submit-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .submit-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .loader {
-    text-align: center;
-    margin-top: 50px;
-    font-size: 18px;
-  }
-  
+/* 
+
+.mcq-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.question {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.options {
+  list-style: none;
+  padding: 0;
+}
+
+.option {
+  margin-bottom: 10px;
+}
+
+input[type="radio"] {
+  margin-right: 10px;
+  visibility: hidden;
+}
+
+label {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+input[type="radio"]:checked + label {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.submit-button {
+  display: block;
+  margin-top: 20px;
+  padding: 15px 20px;
+  font-size: 1rem;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+
+.loader {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 50px;
+  color: #555;
+} 
+
+ */
+
+/* tests.css */
+
+.mcq-container {
+  max-width: 600px;
+  margin: auto;
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.question {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.options {
+  list-style: none;
+  padding: 0;
+}
+
+.option {
+  margin-bottom: 10px;
+}
+
+input[type="radio"] {
+  margin-right: 10px;
+  cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+}
+
+/* Remove visibility: hidden for radio buttons */
+/* Update label style to provide better visual feedback */
+label {
+  display: block;
+  padding: 12px 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Updated style for checked state */
+input[type="radio"]:checked + label {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.submit-button {
+  display: block;
+  margin-top: 20px;
+  padding: 15px 20px;
+  font-size: 2rem;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.loader {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 50px;
+  color: #555;
+}
